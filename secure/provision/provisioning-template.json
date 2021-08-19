@@ -1,0 +1,27 @@
+{
+  "Parameters": {
+    "ThingName": {
+      "Type": "String"
+    },
+    "SerialNumber": {
+      "Type": "String"
+    }
+  },
+  "Resources": {
+    "thing": {
+      "Type": "AWS::IoT::Thing",
+      "Properties": {
+        "ThingName": {
+          "Ref": "ThingName"
+        },
+        "ThingTypeName": "wastebin",
+        "AttributePayload": {
+          "version": "v1",
+          "serialNumber": {
+            "Ref": "SerialNumber"
+          }
+        }
+      }
+    }
+  }
+}
