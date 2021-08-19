@@ -1,4 +1,4 @@
-#!/home/aslan/aws/use-cases/smart-waste-management/env/bin/python3
+#!/home/aslan/aws/tutorials/iot-core-create-many-things-boto3/env/bin/python3
 
 import sys
 import json

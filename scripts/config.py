@@ -3,7 +3,8 @@ import logging
 import os
 
 # Get the working directory
-home_dir = os.environ['SMART_WASTE_MANAGEMENT']
+home_dir = os.environ['AWS_IOT_CORE_CREATE_MANY_THINGS']
+# Automate here as well
 
 
 # Defining the constants

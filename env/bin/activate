@@ -37,7 +37,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/home/aslan/aws/use-cases/smart-waste-management/env"
+VIRTUAL_ENV="/home/aslan/aws/tutorials/iot-core-create-many-things-boto3/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

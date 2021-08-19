@@ -254,4 +254,69 @@ def aws_iot_core_get_thing_types(detail=False):
     return {"thingTypeArns": thingTypeArns, "thingTypeNames": thingTypeNames}
 
 # aws_iot_core_get_policies()
-aws_iot_core_get_thing_types()
+# aws_iot_core_get_thing_types()
+def aws_iot_core_reset():
+
+    # Log info
+    logger.info("Resetting IoT Core ... ")
+
+    # First inactivate the certificates and then force to delete by ignoring attached policies
+    iot_client = boto3.client('iot', REGION)
+
+    # Get certificates, things and policies
+    certificates = aws_iot_core_get_certificates()
+    things = aws_iot_core_get_things()
+    policies = aws_iot_core_get_policies()
+    thingTypes = aws_iot_core_get_thing_types()
+
+    # Step 1: Detach things from certificates. ( improve here)
+    logger.info("aws-iot-core: Detaching things from certificates ...")
+    for certificateArn in certificates["certificateArns"]:
+        attached_things = iot_client.list_principal_things(principal=certificateArn, maxResults=pageSize)["things"]
+        if(len(attached_things) > 1):
+            for attached_thing in attached_things:
+                iot_client.detach_thing_principal(thingName=attached_thing, principal=certificateArn)
+                logger.info("aws-iot-core: " + f"detaching certificate {certificateArn[:30]}... from thing {attached_thing}")
+        else:
+            logger.info(f"aws-iot-core: certificate {certificateArn} doesn't have any attached thing")
+
+    # Step 2: Detach policies from certificates
+    logger.info("aws-iot-core: Detaching policies from certificates ...")
+    for certificateArn in certificates["certificateArns"]:
+        attached_policies = iot_client.list_principal_policies(principal=certificateArn)["policies"]
+        if(len(attached_policies) == 1):
+            attached_policy = attached_policies[0]
+            asd = "fdcffa1d2a923e7e2c93863d9f83f38f8d523e594aacf24e74e5364a1139ef68"
+            # iot_client.detach_policy(policyName=attached_policy,target=asd)
+            #logger.info("aws-iot-core: " + f"detaching {attached_policy} from certificate {certificateArn}")
+        else:
+            logger.info(f"aws-iot-core: certificate {certificateArn} doesn't have any attached policy")
+
+    # Step 3: Delete the certificates from IoT Core registery if is there any
+    logger.info("aws-iot-core: Deleting the certificates from iot-core registery ...")
+    for certificateId in certificates["certificateIds"]:
+        iot_client.update_certificate(certificateId=certificateId, newStatus='INACTIVE')
+        iot_client.delete_certificate(certificateId=certificateId, forceDelete=True)
+        logger.info("aws-iot-core: " + f"Deleting certificateId: {certificateId}")
+
+    # Step 4: Deleting things from IoT Core registery if is there any
+    logger.info("aws-iot-core: Deleting the things from iot-core registery ...")
+    for thingName in things["thingNames"]:
+        iot_client.delete_thing(thingName=thingName)
+        logger.info("aws-iot-core: "+f"Deleting thingName: {thingName}")
+
+    # Step 5: Deleting policies from IoT Core registery if is there any
+    logger.info("aws-iot-core: Deleting the policies from iot-core registery ...")
+    for policyName in policies["policyNames"]:
+        iot_client.delete_policy(policyName=policyName)
+        logger.info("aws-iot-core: "+f"Deleting the policyName: {policyName}")
+
+    # Step 6: Deleting thing types
+    logger.info("aws-iot-core: Deleting the thing types from iot-core registery ...")
+    for thingTypeName in thingTypes['thingTypeNames']:
+        iot_client.deprecate_thing_type(thingTypeName=thingTypeName)
+
+        # After deprecating a thingGroup 5 mins should be waited.
+        # iot_client.delete_thing_type(thingTypeName=thingTypeName)
+
+aws_iot_core_reset()

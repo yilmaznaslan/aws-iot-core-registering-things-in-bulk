@@ -29,7 +29,7 @@ end
 # unset irrelevant variables
 deactivate nondestructive
 
-set -gx VIRTUAL_ENV "/home/aslan/aws/use-cases/smart-waste-management/env"
+set -gx VIRTUAL_ENV "/home/aslan/aws/tutorials/iot-core-create-many-things-boto3/env"
 
 set -gx _OLD_VIRTUAL_PATH $PATH
 set -gx PATH "$VIRTUAL_ENV/bin" $PATH
