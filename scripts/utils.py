@@ -253,8 +253,7 @@ def aws_iot_core_get_thing_types(detail=False):
 
     return {"thingTypeArns": thingTypeArns, "thingTypeNames": thingTypeNames}
 
-# aws_iot_core_get_policies()
-# aws_iot_core_get_thing_types()
+
 def aws_iot_core_reset():
 
     # Log info

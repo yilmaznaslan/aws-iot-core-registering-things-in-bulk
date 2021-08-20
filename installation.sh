@@ -1,4 +1,6 @@
-﻿MYSCRIPT="export Atest=$(pwd)"
-echo $MYSCRIPT >> ~/.bashrc
+INFO="#Define env variable for the AWS IoT Core Tutorial"
 
-# IMprove here
+SCRIPT="export IOT_CORE_CREATE_MANY_THINGS="$(pwd)
+
+echo $INFO >> ~/.bashrc
+echo $SCRIPT >> ~/.bashrc
