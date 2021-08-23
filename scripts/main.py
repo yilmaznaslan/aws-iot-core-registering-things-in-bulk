@@ -5,6 +5,7 @@ import glob
 import boto3
 from config import *
 from utils import *
+import time
 
 
 def create_wastebins(instance_amount):
@@ -87,100 +88,11 @@ def aws_s3_reset():
     print("asd")
 
 
-def aws_iot_core_create_certificates(set_unique):
-    """Create certificate/s for the things registered in the IoT core.
-
-    :param set_unique: Flag to to create unique certificates for each thing or not.
-
-
-    :param bucket: Bucket to upload to
-    :param object_name: S3 object name. If not specified then file_name is used
-
-    :return: True if everythings goes right,otherwise False.
-    """
-    # Delete the existing files under secure/keys and secure/certificates
-    logger.info("Deleting private keys ...")
-    for file in glob.glob(home_dir+"/secure/keys/private/*"):
-        os.remove(file)
-
-    logger.info("Deleting public keys ...")
-    for file in glob.glob(home_dir+"/secure/keys/public/*"):
-        os.remove(file)
-
-    # Create client
-    iot_client = boto3.client('iot', REGION)
-
-    # Get things registered in the IoT core
-    things = aws_iot_core_get_things()
-
-    # Create certificate and keys for things
-    if(set_unique):
-        for thing in things['thingArns']:
-            # Create keys and certificates
-            response = iot_client.create_keys_and_certificate(setAsActive=True)
-
-            # Get the certificate and key contents
-            certificateArn = response["certificateArn"]
-            certificate = response["certificatePem"]
-            key_public = response["keyPair"]["PublicKey"]
-            key_private = response["keyPair"]["PrivateKey"]
-
-            # log information
-            logger.info("aws-iot-core: " + f"certificate {certificateArn} is created")
-            thing_name = "wastebin"
-            thing_id = thing_name+str(thing.serial_number)
-
-            # Storing the private key
-            f = open(home_dir+"/secure/keys/private/"+thing_id+".pem.key", "w")
-            f.write(key_private)
-            f.close()
-
-            # Storing the public key
-            f = open(home_dir+"/secure/keys/public/"+thing_id+".pem.key", "w")
-            f.write(key_public)
-            f.close()
-
-            # Storing the certificate
-            f = open(home_dir+"/secure/certificates/"+thing_id+".pem.crt", "w")
-            f.write(certificate)
-            f.close()
-    else:
-        # Create keys and certificates
-        response = iot_client.create_keys_and_certificate(setAsActive=True)
-
-        # Get the certificate and key contents
-        certificateArn = response["certificateArn"]
-        certificate = response["certificatePem"]
-        key_public = response["keyPair"]["PublicKey"]
-        key_private = response["keyPair"]["PrivateKey"]
-
-        # log information
-        logger.info("aws-iot-core: " + f"certificate {certificateArn} is created")
-        thing_id = "general"
-
-        # Storing the private key
-        f = open(home_dir+"/secure/keys/private/"+thing_id+".pem.key", "w")
-        f.write(key_private)
-        f.close()
-
-        # Storing the public key
-        f = open(home_dir+"/secure/keys/public/"+thing_id+".pem.key", "w")
-        f.write(key_public)
-        f.close()
-
-        # Storing the certificate
-        f = open(home_dir+"/secure/certificates/"+thing_id+".pem.crt", "w")
-        f.write(certificate)
-        f.close()
-
-
-
-
-
 def aws_iot_core_create_bulk_things():
     """
      Registers mupltiple things in aws iot core registery
     """
+    logger_aws_iot_core.info(f"Registering bulky things ...")
 
     # Read provision template
     f = open(PATH_TO_PROVISIONING_TEMPLATE, "r")
@@ -188,27 +100,51 @@ def aws_iot_core_create_bulk_things():
     # Create Client
     iot_client = boto3.client('iot', REGION)
 
-    # Create a thing type prior to start thing registiration
+    # Step 0: Create a thing type prior to start thing registiration
+    logger_aws_iot_core.info(f"\tChecking thingType")
     thingType_name = "wastebin"
-    thingTypes = aws_iot_core_get_thing_types()
-    if( thingType_name in thingTypes["thingTypeNames"]):
-        logger.info(f"aws-iot-core: Thing type Name {thingType_name} is already present no need to crete new one.")
+    thingTypes = aws_iot_core_get_all_thing_types()
+    if(thingType_name in thingTypes["thingTypeNames"]):
+        logger_aws_iot_core.info(f"\t\tThing type Name {thingType_name} is already present no need to crete new one.")
     else:
         iot_client.create_thing_type(thingTypeName='wastebin', thingTypeProperties={'thingTypeDescription': 'Generic wastebin thing type'})
-
 
     # Start registerign things
     response = iot_client.start_thing_registration_task(templateBody=f.read(
     ), inputFileBucket='iot-use-cases', inputFileKey=obj_provision_file, roleArn=ROLE_ARN)
-    logger.info("aws-iot-core: "+"Succesfully created things")
+    logger_aws_iot_core.info("\tSuccesfully created things")
 
 
-def aws_iot_core_create_policy():
+def aws_iot_core_create_policy(detail = True):
     """"
     The purpose of this method is to create a policy to allow things to connect, publish and subcribe to AWS IoT Core.
     """
-    iot_client = boto3.client('iot', REGION)
 
+
+    # Create client
+    iot_client = boto3.client('iot', REGION)    
+
+    # Log Info
+    logger_aws_iot_core.info("Creating a policy")
+
+    # Step 0: Get the policies
+    logger_aws_iot_core.info(f"\tStep 0: Checking policies ...")
+    policies = aws_iot_core_get_all_policies()
+    policies_count = len(policies["policyNames"])
+    if(policies_count == 0):
+        logger_aws_iot_core.info(f"\t\tThere are no policiy registered. Creating a new one")
+        f = open(PATH_TO_POLICY, "r")
+        policyDoc_str = f.read()
+        policyName = "free_policy"
+        # print(policyDoc_str)
+        iot_client.create_policy(policyName='free_policy', policyDocument=policyDoc_str)
+        logger_aws_iot_core.info(f"\t\tPolicy {policyName} is succesfully created.")
+        
+    else:
+        logger_aws_iot_core.info(f"\t\t{policies_count} policies are found. No need to create")
+        return 0
+
+    # Create policy docuement. Still needs improvement
     policyDoc = {}
     policyDoc["Version"] = "2012-10-17"
     policyDoc["Statement"] = {}
@@ -218,14 +154,11 @@ def aws_iot_core_create_policy():
     policyDoc_str = json.dumps(policyDoc)
     # print(policyDoc_str)
 
-    f = open(PATH_TO_POLICY, "r")
-    policyDoc_str = f.read()
-    # print(policyDoc_str)
-    response = iot_client.create_policy(
-        policyName='free_policy', policyDocument=policyDoc_str)
+
+    
 
 
-def aws_iot_core_attach_certificates(set_unique):
+def aws_iot_core_attach_certificates(detail = True):
     """
     Attach certificates to things
     """
@@ -233,9 +166,14 @@ def aws_iot_core_attach_certificates(set_unique):
     # Create client
     iot_client = boto3.client('iot', REGION)
 
-    thingNames = aws_iot_core_get_things()["thingNames"]
-    certificateArns = aws_iot_core_get_certificates()["certificateArns"]
-    policyNames = aws_iot_core_get_policies()["policyNames"]
+    # Log info
+    logger_aws_iot_core.info("Attaching certificates and things ")
+
+
+
+    thingNames = aws_iot_core_get_all_things()["thingNames"]
+    certificateArns = aws_iot_core_get_all_certificates()["certificateArns"]
+    policyNames = aws_iot_core_get_all_policies()["policyNames"]
 
     if(set_unique):
         # Attach unique certificates to things and policy to certificates
@@ -243,16 +181,18 @@ def aws_iot_core_attach_certificates(set_unique):
             for i in range(len(thingNames)):
                 # Attach certificate to things
                 iot_client.attach_thing_principal(thingName=thingNames[i], principal=certificateArns[i])
+                if(detail):
+                    logger_aws_iot_core.info(f"\tAttaching thing {thingNames[i]} and certificate {certificateArns[i][:50]}...")
 
                 # Attach policy to things
                 iot_client.attach_principal_policy(policyName=policyNames[0], principal=certificateArns[i])
         else:
-            logger.info("aws-iot-core: " + "Total number of the things and certificates missmatch")
+            logger_aws_iot_core.info("aws-iot-core: " + "Total number of the things and certificates missmatch")
 
     else:
         # Attach one and only certificate to things.
         if(len(certificateArns) > 1):
-            logger.error("More than one certificate is registered. Can't decide which one to use.")
+            logger_aws_iot_core.error("More than one certificate is registered. Can't decide which one to use.")
         else:
             for i in range(len(thingNames)):
                 iot_client.attach_thing_principal(thingName=thingNames[i], principal=certificateArns[0])
@@ -260,27 +200,30 @@ def aws_iot_core_attach_certificates(set_unique):
 
 
 if __name__ == "__main__":
-    wastebin_amount = 35
+    wastebin_amount = 10
     berlin_wastebins = create_wastebins(wastebin_amount)
-    set_unique = False
 
     # Step 1: Reset/Delete all the existing things, certificates and policies
-    aws_iot_core_reset()
+    # aws_iot_core_reset()
+    aws_iot_core_delete_all_things()
+    aws_iot_core_delete_all_certificates()
+    aws_iot_core_delete_all_policies()
 
     # Step 2: Create a provision file
     create_provision_file(berlin_wastebins)
 
-    # Step 3: Configure the s3 bucket to upload the provision file
+    # # Step 3: Configure the s3 bucket to upload the provision file
     aws_s3_config()
 
-    # Step 4: Register things in Iot Core registery using the provision file in s3 bucket
+    # # Step 4: Register things in Iot Core registery using the provision file in s3 bucket
     aws_iot_core_create_bulk_things()
 
     # Step 5: Create certificates
-    aws_iot_core_create_certificates(set_unique)
+    time.sleep(3)
+    aws_iot_core_create_certificates()
 
     # Step 6: Create policy
     aws_iot_core_create_policy()
 
     # Step 7: Attach everything
-    aws_iot_core_attach_certificates(set_unique)
+    aws_iot_core_attach_certificates()

@@ -2,5 +2,4 @@ import glob
 from config import*
 
 
-for file in glob.glob(home_dir+"/secure/keys/private/*"):
-    print(file)
+logger_aws_iot_core.info(f"\tStep 0")

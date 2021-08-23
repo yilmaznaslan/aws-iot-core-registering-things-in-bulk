@@ -20,16 +20,30 @@ REGION = "us-east-1"
 BUCKET= 'iot-use-cases'
 ROLE_ARN = "arn:aws:iam::250602908823:role/iot-use-cases-demo-role"
 
-pageSize = 25
+# Define max item sizes for search pages
+pageSize = 2
+
+# Define if a unique certificate for each thing should be created or, only once certificate created
+set_unique = True
 
 # Logger Settings
 logger = logging.getLogger()
-logger.setLevel(logging.INFO)
+logger_aws_iot_core = logging.getLogger('example_logger')
+
+logger_aws_iot_core.setLevel(logging.INFO)
+#logger.setLevel(logging.WARNING)
+
 handler = logging.StreamHandler(sys.stdout)
-log_format = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-log_format = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+handler_aws_iot_core = logging.StreamHandler(sys.stdout)
+
+log_format_aws_iot_core = logging.Formatter('%(asctime)s - %(levelname)s - AWS-IOT-CORE - %(message)s',datefmt='%H:%M:%S')
+log_format = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', datefmt='%H:%M:%S')
+
+
+handler_aws_iot_core.setFormatter(log_format_aws_iot_core)
 handler.setFormatter(log_format)
-logger.addHandler(handler)
+#logger.addHandler(handler)
+logger_aws_iot_core.addHandler(handler_aws_iot_core)
 
 
 # S3 bucket directory object setup
