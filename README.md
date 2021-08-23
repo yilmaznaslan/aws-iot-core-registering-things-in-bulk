@@ -1,6 +1,4 @@
 # smart-waste-management
-Design and deployment of a smart waste management system
 
-
-# Checklist
-- iot core reset detach things from certificates list alll the things [-]
+# Documentation
+For full documentation please [visit](https://yilmaznaslan.github.io/aws-iot-core-create-many-things-boto3/) 
