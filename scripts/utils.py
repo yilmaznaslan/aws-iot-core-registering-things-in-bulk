@@ -543,3 +543,6 @@ def aws_iot_core_delete_all_things(detail=True):
 # aws_iot_core_get__all_thing_types(True)
 # aws_iot_core_get_all_certificates(True)
 # aws_iot_core_get_all_things(True)
+
+aws_iot_core_get_all_things(True)
+aws_iot_core_get_all_certificates(True)

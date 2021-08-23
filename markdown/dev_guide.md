@@ -1,4 +1,4 @@
-# AWS Architecture Setup
+# aws-iot-core-create-many-things-boto3
 
 ---
 ## Using the console
