@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
-         <loc>https://www.mkdocs.org/</loc>
+         <loc>https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3/</loc>
          <lastmod>2021-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.mkdocs.org/dev_guide/</loc>
+         <loc>https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3/dev_guide/</loc>
          <lastmod>2021-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.mkdocs.org/introduction/</loc>
+         <loc>https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3/devops_guide/</loc>
          <lastmod>2021-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>
     <url>
-         <loc>https://www.mkdocs.org/ssl_guide/</loc>
+         <loc>https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3/introduction/</loc>
+         <lastmod>2021-08-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3/ssl_guide/</loc>
+         <lastmod>2021-08-23</lastmod>
+         <changefreq>daily</changefreq>
+    </url>
+    <url>
+         <loc>https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3/user_guide/</loc>
          <lastmod>2021-08-23</lastmod>
          <changefreq>daily</changefreq>
     </url>

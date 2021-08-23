@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="MkDocs Team">
+  <link rel="canonical" href="https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3/user_guide/">
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>User Guide - aws-iot-core-create-many-things-boto3</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../css/theme.css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "User Guide";
+    var mkdocs_page_input_path = "user_guide.md";
+    var mkdocs_page_url = "/yilmaznaslan/aws-iot-core-create-many-things-boto3/user_guide/";
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.5.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-274394082"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-274394082');
+  </script>
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> aws-iot-core-create-many-things-boto3</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+      <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="..">Home</a>
+                    </li>
+                </ul>
+                <ul class="current">
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">User Guide</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#installation">Installation</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ubuntu">Ubuntu</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configuration">Configuration</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#aws-iam-configuration">AWS IAM Configuration</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#create-an-iam-user">Create an IAM user</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#application-configuration-optional">Application Configuration (Optional)</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#set-region">Set Region</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#set-certification-option">Set Certification option</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#set-a-name-for-the-thing-type">Set a name for the thing type</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#run">Run</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#results">Results</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#things">Things</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#thing-types">Thing types</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#certificates">Certificates</a>
+    </li>
+    <li class="toctree-l4"><a class="reference internal" href="#policy">Policy</a>
+    </li>
+        </ul>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../devops_guide/">Developer Guide</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../dev_guide/">Developer Guide(add)</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Resources</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../ssl_guide/">SSL</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">aws-iot-core-create-many-things-boto3</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>User Guide</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="user-guide">User Guide</h1>
+<h2 id="installation">Installation</h2>
+<p>The complete project can be found in this repository created by Yilmaz Naci Aslan. For installation please navigate to the github <a href="https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3">repository</a> or simply <a href="https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3/archive/refs/heads/master.zip">download</a> as zip.</p>
+<p>Once the repository is downloaded follow the guidelines below for depending on your operating system</p>
+<h3 id="ubuntu">Ubuntu</h3>
+<pre><code>cd YOUR_WORKING_DIRECTORY
+source installation.sh
+</code></pre>
+<h3 id="windows">Windows</h3>
+<p><code>Not tested yet</code></p>
+<h2 id="configuration">Configuration</h2>
+<p>Once the installation is completed, some configurations are needed be done. All the configuration parameters are defined in the <code>scrpts/config.py</code> script. Configuration steps can be grouped into following sections</p>
+<ul>
+<li>AWS IAM Role</li>
+<li>Application Configuration</li>
+</ul>
+<h3 id="aws-iam-configuration">AWS IAM Configuration</h3>
+<p>The very first thing to configure is the <strong>user settings</strong> for accesing to AWS IoT Core using boto3. If you don't have AWS account please create one before proceeding the next steps.</p>
+<h4 id="create-an-iam-user">Create an IAM user</h4>
+<p>It is good practice to create an AWS user for your account rather than using the root account. </p>
+<ul>
+<li>Create a user for your AWS account by enabling both <strong>Programmatic access</strong> and <strong>Console Acces</strong>. </li>
+<li>Save/download the credetion ID and and scret key</li>
+<li>Add the following policies to the user<ul>
+<li>AWSIoTFullAccess</li>
+<li>AWSS3FullAccess</li>
+</ul>
+</li>
+</ul>
+<p>Save the AWS Access Key Id and Access Key into corrosponding <code>.config</code> file in the operating system.</p>
+<pre><code>aws_access_key_id = xxxxxxxx
+aws_secret_access_key = xxxxxxxx
+</code></pre>
+<blockquote>
+<p>For more information about please see the more detailed explanation section. </p>
+</blockquote>
+<h3 id="application-configuration-optional">Application Configuration (Optional)</h3>
+<h4 id="set-region">Set Region</h4>
+<p>Under the application configuration, <code>REGION</code> of the AWS IoT Core Service being used is defined. Default value for te region is <code>REGION = "us-east-1"</code>. If you want to run your applicatio in another region then simply change the Region constant in <code>config.py</code> to another location.</p>
+<pre><code>REGION = &quot;us-east-1&quot;
+</code></pre>
+<h4 id="set-certification-option">Set Certification option</h4>
+<p>When creating multiple things for to beu the recommand e each thing has a unique certification. This is important for cyber security aspect. However for experimenting purposes one can also use the same certification for multiple things. This behahoiver is determined with the <code>set_unique</code> flag in <code>config.py</code>. By keeping this flag true, a unique certificate will be generated for each thing. Defining this flag to False will generate only one certification in aws iot core, and this certificate will be used for authenticating the created things.</p>
+<p>Default value of the flag is defined as True.</p>
+<pre><code>set_unique = True
+</code></pre>
+<h4 id="set-a-name-for-the-thing-type">Set a name for the thing type</h4>
+<h2 id="run">Run</h2>
+<p>Once the installation and AWS IAM Configuration is completed, you can execute the <code>main.py</code> script. By using the default parameters in <code>Application Configuration</code>, the program will executes as below;</p>
+<ol>
+<li>Creates a <code>S3 Bucket</code> to be used to store provisioning data file.</li>
+<li>Creates <code>10 things, 10 certificates and a policy</code> to test the mqtt connection. </li>
+<li>Stores the created certificates and keys under <code>secure/keys and secure/certificate</code> directories of the project folder. </li>
+<li>Attaches created each certificate with a thing and a policy.</li>
+</ol>
+<h3 id="results">Results</h3>
+<h4 id="things">Things</h4>
+<p><img alt="Things" src="../img/aws-iot-core_thingsZoom.png" /></p>
+<h4 id="thing-types">Thing types</h4>
+<p><img alt="Things" src="../img/aws-iot-core_thingTypesZoom.png" /></p>
+<h4 id="certificates">Certificates</h4>
+<p><img alt="Things" src="../img/aws-iot-core_certificates_uniqueTrueZoom.png" /></p>
+<h4 id="policy">Policy</h4>
+<p><img alt="Policy" src="../img/aws-iot-core_policyZoom.png" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../devops_guide/" class="btn btn-neutral float-right" title="Developer Guide">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href=".." class="btn btn-neutral" title="Home"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+        <span>
+          <a href="https://github.com/mkdocs/mkdocs/" class="fa fa-github" style="color: #fcfcfc"> GitHub</a>
+        </span>
+    
+    
+      <span><a href=".." style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../devops_guide/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme_extra.js" defer></script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

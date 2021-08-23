@@ -7,9 +7,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Project documentation with Markdown.">
   <meta name="author" content="MkDocs Team">
-  <link rel="canonical" href="https://www.mkdocs.org/">
+  <link rel="canonical" href="https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3/">
   <link rel="shortcut icon" href="img/favicon.ico">
-  <title>MkDocs</title>
+  <title>aws-iot-core-create-many-things-boto3</title>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
 
   <link rel="stylesheet" href="css/theme.css" />
@@ -20,7 +20,7 @@
     // Current page data
     var mkdocs_page_name = "Home";
     var mkdocs_page_input_path = "index.md";
-    var mkdocs_page_url = "/";
+    var mkdocs_page_url = "/yilmaznaslan/aws-iot-core-create-many-things-boto3/";
   </script>
   
   <script src="js/jquery-2.1.1.min.js" defer></script>
@@ -45,7 +45,7 @@
     <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
     <div class="wy-side-scroll">
       <div class="wy-side-nav-search">
-        <a href="." class="icon icon-home"> MkDocs</a>
+        <a href="." class="icon icon-home"> aws-iot-core-create-many-things-boto3</a>
         <div role="search">
   <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
       <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
@@ -57,16 +57,21 @@
                 <ul class="current">
                     <li class="toctree-l1 current"><a class="reference internal current" href=".">Home</a>
     <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a>
+    </li>
     </ul>
                     </li>
                 </ul>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="introduction/">Introduction</a>
+                    <li class="toctree-l1"><a class="reference internal" href="user_guide/">User Guide</a>
                     </li>
                 </ul>
-                <p class="caption"><span class="caption-text">Developer Guide</span></p>
                 <ul>
-                    <li class="toctree-l1"><a class="reference internal" href="dev_guide/">AWS Architecture Setup</a>
+                    <li class="toctree-l1"><a class="reference internal" href="devops_guide/">Developer Guide</a>
+                    </li>
+                </ul>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="dev_guide/">Developer Guide(add)</a>
                     </li>
                 </ul>
                 <p class="caption"><span class="caption-text">Resources</span></p>
@@ -83,7 +88,7 @@
       
       <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
         <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-        <a href=".">MkDocs</a>
+        <a href=".">aws-iot-core-create-many-things-boto3</a>
       </nav>
 
       
@@ -107,13 +112,18 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="smart-waste-management-system">Smart Waste Management System</h1>
-<p>COnventional waste collections are complicated and costly. A fleet of trucks drive along busy streets on an arbitrary schedula using inefficient routes. Wiht no data, collections are based on a lot of speculations. At any given time waste bins vary in fill levels.</p>
-<p>IoT sensors can be retrofitted to existing bins of any size and shape with ability to detect solid or liquid substances. Once installed, sensors communicate to online platform where fill levels can be monitored on visual graphs and collection routes are optimzed. </p>
-<p>By implementing smart solutions in waste management systes, pickup points are minimized so fewer vehicles are dispatched resulting in less trafic noise, congestion and CO2 emission.</p>
-<p>Optimized routes can be updated on the drivers app whenever new data is retriveved. Drivers follow the deisgnated route and empty bins that have been highlighted.</p>
-<p>With this solution, less time , less trucks and less fuel will be nedeed for the operations resolving a saving up to 80 percent.<a href="https://www.youtube.com/watch?v=bazmkSKD5fk">Ecube Labs</a></p>
-<p><a href="https://github.com/mkdocs/mkdocs/blob/master/mkdocs.yml">mkdocs example</a></p>
+                <h1 id="aws-iot-core-creating-multiple-things-using-boto3">AWS IoT Core - Creating Multiple Things using boto3</h1>
+<h2 id="introduction">Introduction</h2>
+<p>The Internet of Things (IoT) offers the potential for data acquisition and digital interaction in areas previously inaccessible at an unprecedented scale. The magnitude of this opportunity affects individuals, organizations, and governments in many different ways. </p>
+<p>In order to address the complexity of provisioning and managing connected things manufacturers need ways to simplify and automate tasks like provisioning device identities and providing those identities to the devices as they are being manufactured in a secure and repeatable fashion. Enabling this formidable task is a new feature from the <strong>AWS IoT Device Management service</strong> that enables <strong>bulk provisioning of connected things</strong>.</p>
+<p>This new feature allows users to register large number of devices at once. <strong>Certificates, things, and policy resources</strong> make up the principal and permissions configuration for each thing within AWS IoT Core. Regardless of the specific nature of the application, when developing a solution using AWS IoT Services, you will need to create a ‘thing’ to store information about each device, create a certificate to provide secure credentials for the ‘thing’, and set up permissions by attaching the certificate to an appropriate policy for the ‘thing’. AWS IoT bulk provisioning feature simplifies and automates the registration process.</p>
+<p>AWS IoT Service provides three options for provisioning multiple devices.</p>
+<ul>
+<li>Bulk Provisioning</li>
+<li>Fleet Provisioning</li>
+<li>Just in time Provisioning(JITP)</li>
+</ul>
+<p>This documents provides scripts to automate creating multiple things in your account using the AWS SDK for python (boto3).</p>
               
             </div>
           </div>
@@ -121,7 +131,7 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="introduction/" class="btn btn-neutral float-right" title="Introduction">Next <span class="icon icon-circle-arrow-right"></span></a>
+        <a href="user_guide/" class="btn btn-neutral float-right" title="User Guide">Next <span class="icon icon-circle-arrow-right"></span></a>
       
       
     </div>
@@ -153,7 +163,7 @@
     
     
     
-      <span><a href="introduction/" style="color: #fcfcfc">Next &raquo;</a></span>
+      <span><a href="user_guide/" style="color: #fcfcfc">Next &raquo;</a></span>
     
   </span>
 </div>
@@ -172,5 +182,5 @@
 
 <!--
 MkDocs version : 1.2.2
-Build Date UTC : 2021-08-23 12:23:43.772912+00:00
+Build Date UTC : 2021-08-23 19:46:58.195572+00:00
 -->
