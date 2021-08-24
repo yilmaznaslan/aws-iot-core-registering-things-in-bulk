@@ -3,7 +3,7 @@ import json
 import ssl
 import time
 import glob
-from main_config import *
+from config import *
 
 IoT_protocol_name = "x-amzn-mqtt-ca"
 thing = "dustbin_2"
@@ -12,7 +12,7 @@ PORT = 8883
 CLIENT_ID = "esp32"
 PATH_TO_CERT = home_dir+"/secure/certificates/"+thing+".pem.crt"
 PATH_TO_PRIVATE_KEY = home_dir+"/secure/keys/private/"+thing+".pem.key"
-PATH_TO_ROOT_CA = home_dir+"/secure/certificates/aws-root-ca.pem"
+PATH_TO_ROOT_CA = home_dir+"/secure/ca/AmazonRootCA1.pem"
 MESSAGE = "Hello World"
 TOPIC = "sensor/data"
 
@@ -23,14 +23,14 @@ def create_ssl_contexts():
     path_to_certificates = []
     for private_key_file in sorted(glob.glob(home_dir+'/secure/keys/private/*.key')):
         print(private_key_file)
-        path_to_private_keys.append(private_key_file) 
+        path_to_private_keys.append(private_key_file)
         file_counter += 1
 
     # Go through the certificates
     for certificate_file in sorted(glob.glob(home_dir+'/secure/certificates/*.crt')):
         print(certificate_file)
-        path_to_certificates.append(certificate_file) 
-    
+        path_to_certificates.append(certificate_file)
+
     ssl_contexts = [ssl.create_default_context()]*file_counter
 
     for i in range(file_counter):
@@ -41,17 +41,23 @@ def create_ssl_contexts():
     return ssl_contexts
 
 
-# The callback for when the client receives a CONNACK response from the server.
-def on_connect(client, userdata, rc,properties=None):
+def on_connect(client, userdata, rc, properties=None):
+    """"
+    The callback for when the client receives a CONNACK response from the server.
+    """
     #print("Connected with result code "+str(rc))
     logger.info(f"Connected with the result code {rc}")
     # Subscribing in on_connect() means that if we lose the connection and
     # reconnect then subscriptions will be renewed.
-    #client.subscribe("$SYS/#")
+    # client.subscribe("$SYS/#")
 
-# The callback for when a PUBLISH message is received from the server.
+
 def on_message(client, userdata, msg):
+    """
+    The callback for when a PUBLISH message is received from the server.
+    """
     logger.info(msg.topic+" "+str(msg.payload))
+
 
 def on_publish(client, userdata, mid):
     logger.info(f"Message Published, ID:{mid}")
@@ -59,8 +65,6 @@ def on_publish(client, userdata, mid):
 
 def create_mqtt_clients(ssl_contexts):
     ssl_count = len(ssl_contexts)
-
-
 
     mqtt_clients = []
     for i in range(ssl_count):
@@ -81,7 +85,6 @@ def connect_mqtt_clients(mqtt_clients):
         mqtt_client.loop_start()
         logger.info("Loop started")
 
-
     temperature = 0
     humidity = 10
     serialNumber = 124
@@ -93,8 +96,8 @@ def connect_mqtt_clients(mqtt_clients):
         print("sd")
         for mqtt_client in mqtt_clients:
             if(mqtt_client.is_connected()):
-                message = {"deviceName":deviceName,"temperature":temperature,"humidity":humidity,"serialNumber":serialNumber,"sensorType":deviceType,"sensorModel":sensorModel}
-                mqtt_client.publish(topic = TOPIC,payload = json.dumps(message))
+                message = {"deviceName": deviceName, "temperature": temperature, "humidity": humidity, "serialNumber": serialNumber, "sensorType": deviceType, "sensorModel": sensorModel}
+                mqtt_client.publish(topic=TOPIC, payload=json.dumps(message))
                 print(message)
                 temperature += 1
             time.sleep(1)

@@ -1,6 +1,6 @@
-# AWS IoT Core - Creating Multiple Things using boto3
+# AWS IoT Core - Creating multiple things using boto3
 
-## Introduction 
+# Introduction 
 
 The Internet of Things (IoT) offers the potential for data acquisition and digital interaction in areas previously inaccessible at an unprecedented scale. The magnitude of this opportunity affects individuals, organizations, and governments in many different ways. 
 

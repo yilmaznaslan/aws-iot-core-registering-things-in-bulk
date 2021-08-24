@@ -15,10 +15,6 @@ theme:
 
 
 nav:
-    - Home: index.md
+    - Introduction: index.md
     - User Guide: user_guide.md
     - Developer Guide:  devops_guide.md
-    - Developer Guide(add):  dev_guide.md
-    - Resources:
-        - ssl_guide.md
-    

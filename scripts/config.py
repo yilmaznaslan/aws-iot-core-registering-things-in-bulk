@@ -6,6 +6,11 @@ import os
 home_dir = os.environ['AWS_IOT_CORE_CREATE_MANY_THINGS']
 # Automate here as well
 
+# Application Parameters
+THING_TYPE_NAME = "wastebin"
+THING_NAME_PREFIX = "wastebin"
+
+
 
 # Defining the constants
 PROVISION_FILE_NAME = "provisioning-data.json"

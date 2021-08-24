@@ -74,6 +74,7 @@ Once the installation and AWS IAM Configuration is completed, you can execute th
 
 ### Results
 
+Once the execution of the `main.py` finishes, following resources can be found on the AWS IoT Core Service of the selected Region.
 #### Things
 
 ![Things](img/aws-iot-core_thingsZoom.png)
