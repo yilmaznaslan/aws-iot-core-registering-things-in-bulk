@@ -591,6 +591,45 @@ def aws_s3_config():
     #     s3_client.put_object(Body=open(PATH_TO_PROVISION, 'rb'),
     #                          Bucket=BUCKET_NAME, Key=obj_provision_file)
 
+def aws_iot_core_attach_certificates(detail = True):
+    """
+    Attach certificates the things and the policy
+    """
+
+    # Create client
+    iot_client = boto3.client('iot', REGION)
+
+    # Log info
+    logger_aws_iot_core.info("Attaching certificates and things ")
+
+
+
+    thingNames = aws_iot_core_get_all_things()["thingNames"]
+    certificateArns = aws_iot_core_get_all_certificates()["certificateArns"]
+    policyNames = aws_iot_core_get_all_policies()["policyNames"]
+
+    if(set_unique):
+        # Attach unique certificates to things and policy to certificates
+        if(len(thingNames) == len(certificateArns)):
+            for i in range(len(thingNames)):
+                # Attach certificate to things
+                iot_client.attach_thing_principal(thingName=thingNames[i], principal=certificateArns[i])
+                if(detail):
+                    logger_aws_iot_core.info(f"\tAttaching thing {thingNames[i]} and certificate {certificateArns[i][:50]}...")
+
+                # Attach policy to things
+                iot_client.attach_principal_policy(policyName=policyNames[0], principal=certificateArns[i])
+        else:
+            logger_aws_iot_core.info("aws-iot-core: " + "Total number of the things and certificates missmatch")
+
+    else:
+        # Attach one and only certificate to things.
+        if(len(certificateArns) > 1):
+            logger_aws_iot_core.error("More than one certificate is registered. Can't decide which one to use.")
+        else:
+            for i in range(len(thingNames)):
+                iot_client.attach_thing_principal(thingName=thingNames[i], principal=certificateArns[0])
+                iot_client.attach_principal_policy(policyName=policyNames[0], principal=certificateArns[0])
 
 # aws_iot_core_reset()
 # aws_iot_core_get_all_things()

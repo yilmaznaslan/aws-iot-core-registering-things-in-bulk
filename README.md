@@ -126,7 +126,7 @@ aws_iot_core_create_policy()
 ```
 
 ### Step 7): Attach everything
-
+Creating things, certificates and policies is not enough for connecting things to the AWS IoT Core. Final step in this application is to attach `things,certificates and the policy`. The method below handles this task.
 ```
 aws_iot_core_attach_certificates()
 ```
