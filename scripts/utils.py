@@ -6,17 +6,46 @@ import json
 import glob
 
 
-class ThingWasteBin():
+class AWSIoTThing():
     """
-    This is a generic object class for dustbin instances
+    This is a generic class for creating things to be used for creating the provisioning file
     """
     count = 0
 
-    def __init__(self, latitude=52.165, longitude=13.165):
-        self.serial_number = ThingWasteBin.count
-        self.latitude = latitude
-        self.longitude = longitude
-        ThingWasteBin.count += 1
+    def __init__(self, THING_NAME_PREFIX, THING_TYPE_NAME):
+        self.thing_type_name = THING_TYPE_NAME
+        self.thing_name_prefix = THING_NAME_PREFIX
+        self.id = AWSIoTThing.count
+        self.name = self.thing_name_prefix+"_"+str(self.id)
+        AWSIoTThing.count += 1
+
+
+def create_provision_file():
+    """
+    Creates a provisioning file under /secure/provision. This file later used to uploaded to S3 bucket
+    """
+
+    # Create things
+    things = [None]*THING_COUNT
+    for i in range(THING_COUNT):
+        things[i] = AWSIoTThing(THING_NAME_PREFIX, THING_TYPE_NAME)
+
+    # Clear the provisioning json file by simply opening for writing
+    bulk_provision_file = PATH_TO_PROVISION
+    f = open(bulk_provision_file, "w")
+    f.close()
+
+    # Reopen the provision data file to attend lines
+    f = open(bulk_provision_file, "a")
+
+    # Loop through things and create a provision data for each thing
+    for thing in things:
+        message = {"ThingName": thing.name, "ThingTypeName": thing.thing_type_name, "ThingId": thing.id}
+        json.dump(message, f)
+        f.write("\n")
+
+    # Close the file after operation
+    f.close()
 
 
 def aws_list_roles():
@@ -31,46 +60,6 @@ def aws_list_roles():
         logger_aws_iot_core.info('RoleName: '+Role['RoleName'])
         logger_aws_iot_core.info('RoleArn: '+Role['Arn']+"\n")
         #print (json.dumps(Role, indent=2, default=str))
-
-
-def s3_list_buckets():
-    logger_aws_iot_core.info(f"Listing Buckets ... ")
-    s3_client = boto3.client('s3')
-    s3_response = s3_client.list_buckets()
-    for bucket in s3_response['Buckets']:
-        logger_aws_iot_core.info(f"Found S3 Bucket: {bucket['Name']}")
-
-
-def generate_certificates(thing_name, things):
-    """
-    Dont use it for now.
-    """
-    # Creating command line arguments
-    cmd = [None]*12
-    cmd[0] = 'openssl'
-    cmd[1] = 'req'
-    cmd[2] = '-new'
-    cmd[3] = '-newkey'
-    cmd[4] = 'rsa:2048'
-    cmd[5] = '-nodes'
-    cmd[6] = '-keyout'
-    cmd[8] = '-out'
-    cmd[10] = '-subj'
-    cmd[11] = '/C=DE/ST=Berlin/L=Berlin/O=MyOrg/CN=MyDept'
-
-    # Define the total number of objects to be created
-    total_object_count = len(things)
-
-    # Define generic object name
-    obj_name = thing_name
-
-    # Creating private keys(.key) and certificate signing request(.csr) files
-    for i in range(total_object_count):
-        obj_key = '../security/keys/'+obj_name+"_"+str(i+1)+'.key'
-        obj_csr = '../security/csr/'+obj_name+"_"+str(i+1)+'.csr'
-        cmd[7] = obj_key
-        cmd[9] = obj_csr
-        subprocess.run(cmd, capture_output=True)
 
 
 def aws_iot_core_get_all_policies(detail=False):
@@ -225,6 +214,15 @@ def aws_iot_core_get_all_things(detail=False):
     return {"thingArns": thingArns, "thingNames": thingNames}
 
 
+def aws_iot_core_reset():
+
+    aws_iot_core_delete_all_things()
+
+    aws_iot_core_delete_all_certificates()
+
+    aws_iot_core_delete_all_policies()
+
+
 def aws_iot_core_get_all_thing_types(detail=False):
     """
     returns all the thing types registerd in the aws iot core
@@ -233,7 +231,6 @@ def aws_iot_core_get_all_thing_types(detail=False):
     # Return parameters
     thingTypeNames = []
     thingTypeArns = []
-
 
     # Create client
     iot_client = boto3.client('iot', REGION)
@@ -287,7 +284,6 @@ def aws_iot_core_delete_all_policies():
     # Log info
     logger_aws_iot_core.info("Deleting policies ")
 
-
     # Step 0: Get the policies
     logger_aws_iot_core.info(f"\tStep 0: Checking policies ...")
     policies = aws_iot_core_get_all_policies()
@@ -298,8 +294,7 @@ def aws_iot_core_delete_all_policies():
     else:
         logger_aws_iot_core.info(f"\t\t{policies_count} policies are found.")
 
-
-    # Step : Deleting policies 
+    # Step : Deleting policies
     logger_aws_iot_core.info("\tStep 2: Deleting policies ...")
     for policyName in policies["policyNames"]:
         iot_client.delete_policy(policyName=policyName)
@@ -334,7 +329,6 @@ def aws_iot_core_create_certificates():
     logger_aws_iot_core.info("\t\tDeleting certificates ...")
     for file in glob.glob(home_dir+"/secure/certificates/*"):
         os.remove(file)
-
 
     # Get things registered in the IoT core
     things = aws_iot_core_get_all_things(detail=False)
@@ -421,7 +415,6 @@ def aws_iot_core_delete_all_certificates(detail=True):
         return 0
     else:
         logger_aws_iot_core.info(f"\t\t{certificate_count} certificates are found.")
-
 
     # Step 1: Detach things from certificates.
     logger_aws_iot_core.info(f"\tStep 1: Detaching associated things and certificates ...")
@@ -532,6 +525,73 @@ def aws_iot_core_delete_all_things(detail=True):
         logger_aws_iot_core.info(f"\t\tDeleting thingName: {thingName}")
 
 
+def aws_s3_config():
+    """Upload the provision file to an S3 bucket
+
+    :param file_name: File to upload
+    :param bucket: Bucket to upload to
+    :param object_name: S3 object name. If not specified then file_name is used
+    :return: True if file was uploaded, else False
+    """
+
+    # Create client
+    s3_client = boto3.client('s3', region_name=BUCKET_REGION)
+
+    # Parameter used to detect if bucket is alread created
+    is_bucket_exist = False
+    
+    # Log info
+    logger_aws_iot_core.info("Configuring the S3 Bucket")
+
+
+    # Step 0: List the buckets
+    s3_response = s3_client.list_buckets()
+    logger_aws_iot_core.info(f"\tListing the S3 Buckets in the region {BUCKET_REGION}")
+    
+
+
+    for bucket in s3_response['Buckets']:
+        if(bucket['Name'] == BUCKET_NAME):
+            logger_aws_iot_core.info(f"\t\tFound S3 Bucket: {bucket['Name']} no need to create a new one.")
+            is_bucket_exist = True
+        else:
+            logger_aws_iot_core.info(f"\t\tFound S3 Bucket: {bucket['Name']}")
+
+    # Step 1: Create a bucket. If bucket namaspace is not unique , you need to change the name.
+    if(not is_bucket_exist):
+        try:
+            s3_client.create_bucket(Bucket=BUCKET_NAME)
+            logger_aws_iot_core.info(f"\tCreating a bucket {BUCKET_NAME} is created")
+        except:
+            logger_aws_iot_core.info(f"\tFailed to creating the bucket {BUCKET_NAME} since it already exist. Please change bucket name")
+        
+    # Step 2: Define an S3 object
+    obj_provision_file = PROVISION_FILE_NAME
+
+
+    # Step 3: Upload the provision file
+    s3_client.put_object(Body=open(PATH_TO_PROVISION, 'rb'),
+                              Bucket=BUCKET_NAME, Key=obj_provision_file)
+    logger_aws_iot_core.info(f"\tProvision file is succesfully uploaded")
+        
+    
+    #     obj_project = 'smart-waste-management/'
+    #     obj_secure = obj_project+'secure/'
+    #     obj_private_keys = obj_secure+'keys/private'
+    #     obj_provision = obj_secure+'provision/'
+    #     obj_certificates = obj_secure+'certificates/'
+    #     obj_provision_file = obj_provision+PROVISION_FILE_NAME
+
+    #     # Create Objects in the bucket
+    #     s3_client.put_object(Bucket=BUCKET_NAME, Key=obj_project)
+    #     s3_client.put_object(Bucket=BUCKET_NAME, Key=obj_secure)
+    #     s3_client.put_object(Bucket=BUCKET_NAME, Key=obj_private_keys)
+    #     s3_client.put_object(Bucket=BUCKET_NAME, Key=obj_certificates)
+    #     s3_client.put_object(Bucket=BUCKET_NAME, Key=obj_provision)
+    #     s3_client.put_object(Body=open(PATH_TO_PROVISION, 'rb'),
+    #                          Bucket=BUCKET_NAME, Key=obj_provision_file)
+
+
 # aws_iot_core_reset()
 # aws_iot_core_get_all_things()
 # aws_iot_core_create_certificates()
@@ -544,5 +604,6 @@ def aws_iot_core_delete_all_things(detail=True):
 # aws_iot_core_get_all_certificates(True)
 # aws_iot_core_get_all_things(True)
 
-aws_iot_core_get_all_things(True)
-aws_iot_core_get_all_certificates(True)
+# aws_iot_core_get_all_things(True)
+# aws_iot_core_get_all_certificates(True)
+aws_s3_config()

@@ -7,13 +7,20 @@ home_dir = os.environ['AWS_IOT_CORE_CREATE_MANY_THINGS']
 # Automate here as well
 
 # Application Parameters
-THING_TYPE_NAME = "wastebin"
-THING_NAME_PREFIX = "wastebin"
+THING_TYPE_NAME = "vehicle"
+THING_NAME_PREFIX = "bus"
+THING_COUNT = 10
+
+
+# S3 Configuration Parameters
+BUCKET_NAME = "iot-tutorials-yilmaznaslan"
+BUCKET_REGION = "us-east-1"
 
 
 
-# Defining the constants
+# Local directory paths and files
 PROVISION_FILE_NAME = "provisioning-data.json"
+
 PROVISIONING_TEMPLATE = 'provisioning-template.json'
 POLICY_FILE_NAME = "general_policy.json"
 
@@ -32,11 +39,11 @@ pageSize = 2
 set_unique = True
 
 # Logger Settings
-logger = logging.getLogger()
+
 logger_aws_iot_core = logging.getLogger('example_logger')
 
 logger_aws_iot_core.setLevel(logging.INFO)
-#logger.setLevel(logging.WARNING)
+
 
 handler = logging.StreamHandler(sys.stdout)
 handler_aws_iot_core = logging.StreamHandler(sys.stdout)
@@ -47,7 +54,7 @@ log_format = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s', date
 
 handler_aws_iot_core.setFormatter(log_format_aws_iot_core)
 handler.setFormatter(log_format)
-#logger.addHandler(handler)
+
 logger_aws_iot_core.addHandler(handler_aws_iot_core)
 
 

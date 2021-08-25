@@ -3,7 +3,10 @@
     "ThingName": {
       "Type": "String"
     },
-    "SerialNumber": {
+    "ThingTypeName": {
+      "Type": "String"
+    },
+    "ThingId": {
       "Type": "String"
     }
   },
@@ -14,11 +17,13 @@
         "ThingName": {
           "Ref": "ThingName"
         },
-        "ThingTypeName": "wastebin",
+        "ThingTypeName": {
+          "Ref": "ThingTypeName"
+        },
         "AttributePayload": {
           "version": "v1",
-          "serialNumber": {
-            "Ref": "SerialNumber"
+          "thingId": {
+            "Ref": "ThingId"
           }
         }
       }

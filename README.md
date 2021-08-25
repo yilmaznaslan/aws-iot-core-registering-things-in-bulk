@@ -26,7 +26,7 @@ After running the sample application, all the certificates and keys(private/publ
 
 
 ## Installation
----
+
 For installation, simply download the repository and follow the instructions depending on your operating system.
 
 ### Ubuntu 
@@ -74,38 +74,63 @@ The developed solution provides different options to adjust the code to your nee
 | REGION          | `"us-east1"`  | `AWS Region where the IoT Core Application wanted to be developed`                                                                                                 |
 | IAM_ARN         | `"us-east1"`  | `ARN of the the created IAM Role`                                                                                                                                  |
 | thing_type      | `wastebin`    | `Type of the created thing(s)`                                                                                                                                     |
-| thing_type      | `wastebin`    | `Type of the created thing(s)`                                                                                                                                     |
+| thing_prefix      | `wastebin`    | `A prefix for your things.`                                                                                                                                     |
 | thing_count     | 10            | `Number of things to be created in AWS IoT Core`                                                                                                                   |
 | set_cert_unique | True          | `If set to True, a seperate certificate for each thing will be created. If set to False, one certificate will be created and shared by the all registered things.` |
 
 
 ## How does it work ? 
----
+
+
 The application executes as below;
 
 ### Step 0) Resetting/Deleting the AWS IoT Core(Optional)
-Although this step is marked as optional, it is a good practice use for experimenting the tools provided by this repository. Since it deletes all the registered `things,certificates and policies`, use it carefully. In order to prevent deleting important resources by accident, this feature is not implemented by default to the execution flow in the `main.py`. You can call the following method for deleting.
+Although this step is marked as optional, it is a good practice use for experimenting the tools provided by this repository. Since it deletes all the registered `things,certificates and policies`, use it carefully. In order to prevent deleting important resources by accident, this feature is not implemented by default to the execution flow in the `main.py`. You can call the following method for resetting the `AWS IoT Core`.
 
 ```
 aws_iot_core_reset()
 ```
 
-### Step 1) Creating a provision file
-The very first step in the `main.py`
-### Step 2) Configuring a S3 bucket
+### Step 1) Creating provisioning files
+The very first step in the execution of `main.py` is to create a `provisioning template` and a `provision file`. Provision file includes all the necessary informations for each thing. When registering the things in bulk, provisionung template and provision file are used together to register things. As an output of this method, two files are create under `secure/provision`. This operation is done by calling the method below.
 
-### Step 3): Register things in Iot Core registery using the provision file in s3 bucket
+```
+create_provision_files()
+```
+
+### Step 2) Configuring a S3 bucket
+Once the provisioning files created locally now it is time to upload these files into `AWS S3` bucket. In order to register things in bulk, it is a **must** to upload the `provision file` to a S3 bucket.
+
+The method below creates a bucket in your account and uploads the file into it.
+```
+aws_s3_config()
+```
+### Step 3) Create things in the Iot Core registery
+
+After provisioning file is created locally and provision file is uploaded into S3 bucket, things can be created in the IoT Core Registery. The  method below creates a bulk thing provisioning task.
+
 aws_iot_core_create_bulk_things()
 
-### Step 5): Create certificates
-time.sleep(3)
-aws_iot_core_create_certificates()
+### Step 4) Create certificates in the Iot Core registery
+In order to connect things using the MQTT protocoll, things needed to be associated with X.509 Certificates. We can either create a different certificate for the each registered things or we can also create one certificate and share it among the things. Based on the flag `set_cert_unique`, the method below take cares to create certificates.
 
-### Step 6): Create policy
+```
+aws_iot_core_create_certificates()
+```
+
+### Step 6) Create policy
+For ensuring the connectivity features of the created things, a simple policy is also created in the IoT Core Registery called **free_policy**. This policy allows all the connection, publishing and subscribing features.
+
+```
 aws_iot_core_create_policy()
+```
 
 ### Step 7): Attach everything
+
+```
 aws_iot_core_attach_certificates()
+```
+
 
 
 ## Documentation

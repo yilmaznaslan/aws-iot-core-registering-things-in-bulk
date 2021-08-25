@@ -8,84 +8,9 @@ from utils import *
 import time
 
 
-def create_wastebins(instance_amount):
-    # Create Instances
-    berlin_wastebins = [None]*instance_amount
-    for i in range(instance_amount):
-        berlin_wastebins[i] = ThingWasteBin()
-
-    return berlin_wastebins
 
 
-def create_provision_file(things):
-    """
-    Creates a provision data file under /secure/provision
-    """
-    # Clear the provisioning json file by simply opening for writing
-    bulk_provision_file = PATH_TO_PROVISION
-    f = open(bulk_provision_file, "w")
-    f.close()
 
-    # Reopen the provision data file to attend lines
-    f = open(bulk_provision_file, "a")
-
-    # Loop through things and create a provision data for each thing
-    for thing in things:
-        ThingName = "wastebin_"+str(thing.serial_number)
-        ThingId = thing.serial_number
-        message = {"ThingName": ThingName, "SerialNumber": ThingId}
-        json.dump(message, f)
-        f.write("\n")
-
-    # Close the file after operation
-    f.close()
-
-
-def aws_s3_config():
-    """Upload a file to an S3 bucket
-
-    :param file_name: File to upload
-    :param bucket: Bucket to upload to
-    :param object_name: S3 object name. If not specified then file_name is used
-    :return: True if file was uploaded, else False
-    """
-
-    bucket_name = 'iot-use-cases'
-    bucket_region = "us-east-1"
-    s3_client = boto3.client('s3', region_name=bucket_region)
-    s3_response = s3_client.list_buckets()
-    is_bucket_exist = False
-    is_reset = True
-    for bucket in s3_response['Buckets']:
-        if(bucket['Name'] == bucket_name):
-            logger.info("aws-s3: "+f"Found S3 Bucket: {bucket['Name']} no need to create a new one.")
-            #is_bucket_exist = True
-        else:
-            logger.info("aws-s3: "+f"Found S3 Bucket: {bucket['Name']}")
-
-    if(not is_bucket_exist):
-        s3_client.create_bucket(Bucket=bucket_name)
-        logger.info(f"Bucket {bucket_name} is created")
-
-        obj_project = 'smart-waste-management/'
-        obj_secure = obj_project+'secure/'
-        obj_private_keys = obj_secure+'keys/private'
-        obj_provision = obj_secure+'provision/'
-        obj_certificates = obj_secure+'certificates/'
-        obj_provision_file = obj_provision+PROVISION_FILE_NAME
-
-        # Create Objects in the bucket
-        s3_client.put_object(Bucket=bucket_name, Key=obj_project)
-        s3_client.put_object(Bucket=bucket_name, Key=obj_secure)
-        s3_client.put_object(Bucket=bucket_name, Key=obj_private_keys)
-        s3_client.put_object(Bucket=bucket_name, Key=obj_certificates)
-        s3_client.put_object(Bucket=bucket_name, Key=obj_provision)
-        s3_client.put_object(Body=open(PATH_TO_PROVISION, 'rb'),
-                             Bucket=bucket_name, Key=obj_provision_file)
-
-
-def aws_s3_reset():
-    print("asd")
 
 
 def aws_iot_core_create_bulk_things():
@@ -200,25 +125,20 @@ def aws_iot_core_attach_certificates(detail = True):
 
 
 if __name__ == "__main__":
-    wastebin_amount = 10
-    berlin_wastebins = create_wastebins(wastebin_amount)
 
-    # Step 1: Reset/Delete all the existing things, certificates and policies
-    # aws_iot_core_reset()
-    aws_iot_core_delete_all_things()
-    aws_iot_core_delete_all_certificates()
-    aws_iot_core_delete_all_policies()
+    # Step 0 : Reset/Delete all the existing things, certificates and policies
+    aws_iot_core_reset()
 
-    # Step 2: Create a provision file
-    create_provision_file(berlin_wastebins)
+    # Step 1: Create a provision file
+    create_provision_file()
 
-    # # Step 3: Configure the s3 bucket to upload the provision file
+    # Step 2: Configure the s3 bucket 
     aws_s3_config()
 
-    # # Step 4: Register things in Iot Core registery using the provision file in s3 bucket
+    # Step 3: Create things in the Iot Core registery
     aws_iot_core_create_bulk_things()
 
-    # Step 5: Create certificates
+    # Step 4: Create certificates in the Iot Core registery
     time.sleep(3)
     aws_iot_core_create_certificates()
 

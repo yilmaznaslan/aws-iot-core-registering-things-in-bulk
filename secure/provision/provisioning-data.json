@@ -1,10 +1,10 @@
-{"ThingName": "wastebin_0", "SerialNumber": 0}
-{"ThingName": "wastebin_1", "SerialNumber": 1}
-{"ThingName": "wastebin_2", "SerialNumber": 2}
-{"ThingName": "wastebin_3", "SerialNumber": 3}
-{"ThingName": "wastebin_4", "SerialNumber": 4}
-{"ThingName": "wastebin_5", "SerialNumber": 5}
-{"ThingName": "wastebin_6", "SerialNumber": 6}
-{"ThingName": "wastebin_7", "SerialNumber": 7}
-{"ThingName": "wastebin_8", "SerialNumber": 8}
-{"ThingName": "wastebin_9", "SerialNumber": 9}
+{"ThingName": "bus_0", "ThingTypeName": "vehicle", "ThingId": 0}
+{"ThingName": "bus_1", "ThingTypeName": "vehicle", "ThingId": 1}
+{"ThingName": "bus_2", "ThingTypeName": "vehicle", "ThingId": 2}
+{"ThingName": "bus_3", "ThingTypeName": "vehicle", "ThingId": 3}
+{"ThingName": "bus_4", "ThingTypeName": "vehicle", "ThingId": 4}
+{"ThingName": "bus_5", "ThingTypeName": "vehicle", "ThingId": 5}
+{"ThingName": "bus_6", "ThingTypeName": "vehicle", "ThingId": 6}
+{"ThingName": "bus_7", "ThingTypeName": "vehicle", "ThingId": 7}
+{"ThingName": "bus_8", "ThingTypeName": "vehicle", "ThingId": 8}
+{"ThingName": "bus_9", "ThingTypeName": "vehicle", "ThingId": 9}
