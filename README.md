@@ -131,7 +131,15 @@ Creating things, certificates and policies is not enough for connecting things t
 aws_iot_core_attach_certificates()
 ```
 
+## Quick Tips
+- Creating large the number of objects also increases the time required to setup the resources. For experimenting the tool try to keep the number of things to be creates less than 100 to prevent excessive load on the IoT Core. Creating 1000 things takes approximetly ~20 minutes.
+- Once everything is set in the AWS IoT Core, you can run the `mqtt_test.py` to test the connectivity of the created things. Since it takes approximetly 1 seconds to create a connection for a MQTT Client, it also takes quite a lot of time to execute the script if the number of the things are large. 
 
 
-## Documentation
-For full documentation please [visit](https://yilmaznaslan.github.io/aws-iot-core-create-many-things-boto3/) 
+## API Reference
+
+> Coming soon
+
+## See also
+here my other tutorials / repositories
+
