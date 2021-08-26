@@ -1,9 +1,8 @@
-# AWS IoT Core Bulk Provisioning
+# AWS IoT Core - Registiring things in bulk implementing fleet provisioning process
 
 ## Introduction
 
-
-This documents provides scripts to automate creating multiple things in your account using the AWS SDK for Python (boto3).It includes tools that can be used for registering things in bulks to `AWS IoT Core` using a provisioning template and a provision file stored in a `AWS S3 ` bucket. 
+This documents provides scripts to automate **registiring things in bulk** with a **fleet provisioning template** into AWS IoT Core using the AWS SDK for Python (boto3). It includes tools that can be used for registering things in bulks to `AWS IoT Core` using a `fleet provisioning template` and a provision file stored in a `AWS S3 ` bucket. 
 
 The AWS IoT Bulk Provisioning python example creates IoT thing(s), certificate(s), an IoT thing type and a policy. Once the **Certificates, things, and policy resources** are createted, it will also attach them to each other.
 
@@ -73,9 +72,9 @@ The developed solution provides different options to adjust the code to your nee
 | --------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | REGION          | `"us-east1"`  | `AWS Region where the IoT Core Application wanted to be developed`                                                                                                 |
 | IAM_ARN         | `"us-east1"`  | `ARN of the the created IAM Role`                                                                                                                                  |
-| thing_type      | `wastebin`    | `Type of the created thing(s)`                                                                                                                                     |
-| thing_prefix      | `wastebin`    | `A prefix for your things.`                                                                                                                                     |
-| thing_count     | 10            | `Number of things to be created in AWS IoT Core`                                                                                                                   |
+| THING_TYPE_NAME      | `vehicle`    | `Type of the created thing(s)`                                                                                                                                     |
+| THING_NAME_PREFIX      | `bus`    | `A name prefix to be used when creating your things.`                                                                                                                                     |
+| THING_COUNT     | 10            | `Number of things to be created in AWS IoT Core`                                                                                                                   |
 | set_cert_unique | True          | `If set to True, a seperate certificate for each thing will be created. If set to False, one certificate will be created and shared by the all registered things.` |
 
 
@@ -130,7 +129,11 @@ Creating things, certificates and policies is not enough for connecting things t
 ```
 aws_iot_core_attach_certificates()
 ```
+### Summary
+```
 
+
+```
 ## Quick Tips
 - Creating large the number of objects also increases the time required to setup the resources. For experimenting the tool try to keep the number of things to be creates less than 100 to prevent excessive load on the IoT Core. Creating 1000 things takes approximetly ~20 minutes.
 - Once everything is set in the AWS IoT Core, you can run the `mqtt_test.py` to test the connectivity of the created things. Since it takes approximetly 1 seconds to create a connection for a MQTT Client, it also takes quite a lot of time to execute the script if the number of the things are large. 
