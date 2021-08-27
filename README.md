@@ -13,7 +13,7 @@ After running the sample application, all the certificates and keys(private/publ
 
 
 ## Prerequests & Requirements
----
+
 - An AWS IAM User with  Programmatic access and following permissions policies attached.
   - `AWSS3FullAccess` ,`AWSIoTFullAccess` policies. These are the minimum permission required to run the application. More comphrensive policies such as `AWSS3FullAccess` and `AWSIoTFullAccess` can also be applied.
 - An IoT Service **IAM role** to allow AWS IoT Core to call other AWS services. It is necessary to use `start_thing_registration_task()` function. Created IAM role must have minimum the following permission policies attached.
@@ -53,7 +53,7 @@ ROLE_ARN = "arn:aws:iam::xxxxx..."
 
 
 ## Usage 
----
+
 Once the installation of the application is completed, you can run the `/scripts/main.py` script to register 
 - Thing(s),
 - Certificate(s),
