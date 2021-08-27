@@ -1,10 +1,10 @@
-# AWS IoT Core - Registiring things in bulk implementing fleet provisioning process
+# How to automate registering things in bulk to AWS IoT Core
 
 ## Introduction
 
-This documents provides scripts to automate **registiring things in bulk** with a **fleet provisioning template** into AWS IoT Core using the AWS SDK for Python (boto3). It includes tools that can be used for registering things in bulks to `AWS IoT Core` using a `fleet provisioning template` and a provision file stored in a `AWS S3 ` bucket. 
+This documents provides scripts to automate **registering things in bulk** with a **fleet provisioning process** into AWS IoT Core by using the AWS SDK for Python (boto3). In addition to the tools used for the registeration process it also provides **ready to use** methods to handle things, certificates and policies in large scale numbers.
 
-The AWS IoT Bulk Provisioning python example creates IoT thing(s), certificate(s), an IoT thing type and a policy. Once the **Certificates, things, and policy resources** are createted, it will also attach them to each other.
+The main aim of the repository is to automate process of registering things in bulks to `AWS IoT Core` using a `fleet provisioning template` and a provision file stored in a `AWS S3 ` bucket. After succesfully deploying the example application, any number of thing(s), certificate(s), an IoT thing type and a policy will be created in the `AWS IoT Core`. Once the **Certificates, things, and policy resources** are createted, it will also attach them to each other.
 
 
 After running the sample application, all the certificates and keys(private/public) are saved locally. With the help of the `mqtt_connection_test.py` script, connecitivity feature of the created things associated with certificates can be validated. 
@@ -16,11 +16,9 @@ After running the sample application, all the certificates and keys(private/publ
 ---
 - An AWS IAM User with  Programmatic access and following permissions policies attached.
   - `AWSS3FullAccess` ,`AWSIoTFullAccess` policies. These are the minimum permission required to run the application. More comphrensive policies such as `AWSS3FullAccess` and `AWSIoTFullAccess` can also be applied.
-- An IoT Service IAM role to allow AWS IoT Core to call other AWS services. Created IAM role must have minimum the following permission policies attached.
+- An IoT Service **IAM role** to allow AWS IoT Core to call other AWS services. It is necessary to use `start_thing_registration_task()` function. Created IAM role must have minimum the following permission policies attached.
   - `AWSIoTThingsRegistration (AWS managed policy)`
   - `AmazonS3ReadOnlyAccess (AWS managed policy)`
-
-
 - [Python](https://www.python.org/downloads/)
 
 
@@ -75,7 +73,7 @@ The developed solution provides different options to adjust the code to your nee
 | THING_TYPE_NAME      | `vehicle`    | `Type of the created thing(s)`                                                                                                                                     |
 | THING_NAME_PREFIX      | `bus`    | `A name prefix to be used when creating your things.`                                                                                                                                     |
 | THING_COUNT     | 10            | `Number of things to be created in AWS IoT Core`                                                                                                                   |
-| set_cert_unique | True          | `If set to True, a seperate certificate for each thing will be created. If set to False, one certificate will be created and shared by the all registered things.` |
+| SET_CERT_UNIQUE | True          | `If set to True, a seperate certificate for each thing will be created. If set to False, one certificate will be created and shared by the all registered things.` |
 
 
 ## How does it work ? 
@@ -144,5 +142,5 @@ aws_iot_core_attach_certificates()
 > Coming soon
 
 ## See also
-here my other tutorials / repositories
+> Coming soon.Here my other tutorials / repositories
 

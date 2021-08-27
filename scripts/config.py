@@ -6,17 +6,20 @@ import os
 home_dir = os.environ['AWS_IOT_CORE_CREATE_MANY_THINGS']
 # Automate here as well
 
-# Application Parameters
+# Parameters used for creating thing(s) and thing type
 THING_TYPE_NAME = "vehicle"
 THING_NAME_PREFIX = "bus"
 THING_COUNT = 10
 
+# Parameters used for the MQTT Connection
+MQTT_ENDPOINT = "a2h3iir2hinzvl-ats.iot.us-east-1.amazonaws.com"
+MQTT_PORT = 8883
+MQTT_TOPIC = "sensor/data"
+PATH_TO_ROOT_CA = home_dir+"/secure/ca/AmazonRootCA1.pem"
 
-# S3 Configuration Parameters
-BUCKET_NAME = "iot-tutorials-yilmaznaslan"
-BUCKET_REGION = "us-east-1"
 
-
+# Parameter used for creating certificates(s)
+SET_CERT_UNIQUE = False
 
 # Local directory paths and files
 PROVISION_FILE_NAME = "provisioning-data.json"
@@ -32,11 +35,20 @@ REGION = "us-east-1"
 BUCKET= 'iot-use-cases'
 ROLE_ARN = "arn:aws:iam::250602908823:role/iot-use-cases-demo-role"
 
+# S3 Configuration Parameters
+BUCKET_NAME = "aws-iot-tutorials"
+BUCKET_REGION = "us-east-1"
+
+obj_project = 'smart-waste-management/'
+obj_secure = obj_project+'secure/'
+#obj_provision = obj_secure+'provision/'
+OBJ_PROVISION_FILE= PROVISION_FILE_NAME
+print(OBJ_PROVISION_FILE)
+
+
 # Define max item sizes for search pages
 pageSize = 2
 
-# Define if a unique certificate for each thing should be created or, only once certificate created
-set_unique = True
 
 # Logger Settings
 
@@ -58,8 +70,4 @@ handler.setFormatter(log_format)
 logger_aws_iot_core.addHandler(handler_aws_iot_core)
 
 
-# S3 bucket directory object setup
-obj_project = 'smart-waste-management/'
-obj_secure = obj_project+'secure/'
-obj_provision = obj_secure+'provision/'
-obj_provision_file = obj_provision+PROVISION_FILE_NAME
+
