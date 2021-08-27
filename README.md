@@ -137,9 +137,11 @@ aws_iot_core_attach_certificates()
 - Once everything is set in the AWS IoT Core, you can run the `mqtt_test.py` to test the connectivity of the created things. Since it takes approximetly 1 seconds to create a connection for a MQTT Client, it also takes quite a lot of time to execute the script if the number of the things are large. 
 
 
-## API Reference
+## Documentation
 
+For fully documentation please visit the [Github Page](https://yilmaznaslan.github.io/aws-iot-core-registering-things-in-bulk/)
 > Coming soon
+
 
 ## See also
 > Coming soon.Here my other tutorials / repositories

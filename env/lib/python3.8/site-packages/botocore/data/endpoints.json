@@ -830,6 +830,18 @@
           "us-west-2" : { }
         }
       },
+      "aps" : {
+        "defaults" : {
+          "protocols" : [ "https" ]
+        },
+        "endpoints" : {
+          "eu-central-1" : { },
+          "eu-west-1" : { },
+          "us-east-1" : { },
+          "us-east-2" : { },
+          "us-west-2" : { }
+        }
+      },
       "athena" : {
         "endpoints" : {
           "af-south-1" : { },
@@ -3683,6 +3695,7 @@
       "iotanalytics" : {
         "endpoints" : {
           "ap-northeast-1" : { },
+          "ap-south-1" : { },
           "ap-southeast-2" : { },
           "eu-central-1" : { },
           "eu-west-1" : { },
@@ -7807,6 +7820,12 @@
           "cn-northwest-1" : { }
         }
       },
+      "emr-containers" : {
+        "endpoints" : {
+          "cn-north-1" : { },
+          "cn-northwest-1" : { }
+        }
+      },
       "es" : {
         "endpoints" : {
           "cn-north-1" : { },
@@ -7820,6 +7839,15 @@
         }
       },
       "firehose" : {
+        "endpoints" : {
+          "cn-north-1" : { },
+          "cn-northwest-1" : { }
+        }
+      },
+      "fms" : {
+        "defaults" : {
+          "protocols" : [ "https" ]
+        },
         "endpoints" : {
           "cn-north-1" : { },
           "cn-northwest-1" : { }
@@ -10453,6 +10481,11 @@
         },
         "isRegionalized" : false,
         "partitionEndpoint" : "aws-iso-global"
+      },
+      "route53resolver" : {
+        "endpoints" : {
+          "us-iso-east-1" : { }
+        }
       },
       "runtime.sagemaker" : {
         "endpoints" : {
