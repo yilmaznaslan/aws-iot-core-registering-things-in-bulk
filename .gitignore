@@ -1,5 +1,8 @@
 # Ignore VS workspace settings
 **/.vscode
 
-*.key
 
+# Ignore all the private and public keys
+*.crt
+
+*.key

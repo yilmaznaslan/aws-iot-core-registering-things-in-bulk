@@ -8,7 +8,7 @@ home_dir = os.environ['AWS_IOT_CORE_REGISTERING_THINGS_IN_BULK']
 
 # Parameters used for creating thing(s) and thing type
 THING_TYPE_NAME = "vehicle"
-THING_NAME_PREFIX = "bus"
+THING_NAME_PREFIX = "car"
 THING_COUNT = 5
 
 # Parameters used for the MQTT Connection
