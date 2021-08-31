@@ -1,4 +1,4 @@
-site_name: aws-iot-core-create-many-things-boto3
+site_name: AWS IoT Core
 site_url: https://github.com/yilmaznaslan/aws-iot-core-create-many-things-boto3
 site_description: Project documentation with Markdown.
 site_author: MkDocs Team
@@ -17,4 +17,8 @@ theme:
 nav:
     - Introduction: index.md
     - User Guide: user_guide.md
-    - Developer Guide:  devops_guide.md
+    - Developer Guide:  
+        - Connecting to AWS IoT Core: developer_guide.md
+        - Security: security.md
+        - Rules: rules.md
+        - Device provisioning: device_provisioning.md

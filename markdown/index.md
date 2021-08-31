@@ -1,4 +1,4 @@
-# AWS IoT Core - Creating multiple things using boto3
+# AWS IoT Core 
 
 # Introduction 
 

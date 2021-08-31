@@ -10,20 +10,20 @@ if __name__ == "__main__":
     #aws_s3_reset()
 
     # Step 1: Create a provision file
-    create_provision_file()
+    #create_provision_file()
 
     # Step 2: Configure the s3 bucket 
     aws_s3_config()
 
     # Step 3: Create things in the Iot Core registery
-    status = aws_iot_core_create_bulk_things()
-    if(not status):exit
+    #status = aws_iot_core_create_bulk_things()
+    #if(not status):exit
 
     # Step 4: Create certificates in the Iot Core registery
-    aws_iot_core_create_certificates()
+    #aws_iot_core_create_certificates()
     
     # Step 6: Create policy
-    aws_iot_core_create_policy()
+    #aws_iot_core_create_policy()
 
     # Step 7: Attach everything
-    aws_iot_core_attach_certificates()
+    #aws_iot_core_attach_certificates()

@@ -1,8 +1,5 @@
 # Ignore VS workspace settings
 **/.vscode
 
-**/keys
-
-**/certificates
-
+*.key
 
