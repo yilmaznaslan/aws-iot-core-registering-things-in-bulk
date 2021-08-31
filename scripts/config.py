@@ -3,7 +3,7 @@ import logging
 import os
 
 # Get the working directory
-home_dir = os.environ['AWS_IOT_CORE_CREATE_MANY_THINGS']
+home_dir = os.environ['AWS_IOT_CORE_REGISTERING_THINGS_IN_BULK']
 # Automate here as well
 
 # Parameters used for creating thing(s) and thing type
