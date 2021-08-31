@@ -9,7 +9,7 @@ home_dir = os.environ['AWS_IOT_CORE_REGISTERING_THINGS_IN_BULK']
 # Parameters used for creating thing(s) and thing type
 THING_TYPE_NAME = "vehicle"
 THING_NAME_PREFIX = "bus"
-THING_COUNT = 10
+THING_COUNT = 5
 
 # Parameters used for the MQTT Connection
 MQTT_ENDPOINT = "a2h3iir2hinzvl-ats.iot.us-east-1.amazonaws.com"
@@ -19,7 +19,7 @@ PATH_TO_ROOT_CA = home_dir+"/secure/ca/AmazonRootCA1.pem"
 
 
 # Parameter used for creating certificates(s)
-SET_CERT_UNIQUE = False
+SET_CERT_UNIQUE = True
 
 # Local directory paths and files
 PROVISION_FILE_NAME = "provisioning-data.json"
