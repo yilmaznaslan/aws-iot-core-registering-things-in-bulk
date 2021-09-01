@@ -2,7 +2,9 @@
 **/.vscode
 
 
-# Ignore all the private and public keys
+# Ignore all the certificates
 *.crt
 
+
+# Ignore all the private and public keys
 *.key

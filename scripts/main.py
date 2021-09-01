@@ -1,12 +1,14 @@
 from config import *
 from utils import *
 from sys import exit
+
+
 if __name__ == "__main__":
 
-    # Step 0.0 : Reset/Delete all the existing things, certificates and policies
+    # Step 0.0 : Reset/Delete all the existing things, certificates and policies registered in AWS IoT Core
     aws_iot_core_reset()
 
-    # Step 0.1 : Reset/Delete all the existing buckets and their contents
+    # Step 0.1 : Reset/Delete all the existing buckets and their contents in AWS S3
     #aws_s3_reset()
 
     # Step 1: Create a provision file
@@ -23,7 +25,7 @@ if __name__ == "__main__":
     aws_iot_core_create_certificates()
     
     # Step 6: Create policy
-    #aws_iot_core_create_policy()
+    aws_iot_core_create_policy()
 
     # Step 7: Attach everything
-    #aws_iot_core_attach_certificates()
+    aws_iot_core_attach_certificates()
